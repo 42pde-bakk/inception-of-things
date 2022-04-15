@@ -1,0 +1,50 @@
+MASTER_NAME = 'hsmitsS'
+MASTER_IP = '192.168.42.110'
+
+WORKER_NAME = 'hsmitsSW'
+WORKER_IP = '192.168.42.111'
+
+COMMON_VMEM = 1024
+COMMON_VCPU = 1
+
+$DISABLE_FIREWALL_SCRIPT = <<-SHELL
+  sudo systemctl disable --now firewalld
+SHELL
+
+Vagrant.configure("2") do |config|
+	config.vm.box = "centos/8"
+	config.vm.box_url = "https://app.vagrantup.com/centos/boxes/8/versions/2011.0/providers/virtualbox.box"
+	config.vm.box_check_update = false
+    config.vm.provision "shell", inline: $DISABLE_FIREWALL_SCRIPT 
+
+	config.vbguest.installer_options = { allow_kernel_upgrade: true }
+
+	config.vm.provider "virtualbox" do |v|
+		v.memory = COMMON_VMEM
+		v.cpus = COMMON_VCPU
+		v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+		v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+	end
+
+	config.vm.define MASTER_NAME do |master|
+		master.vm.hostname = MASTER_NAME
+		master.vm.network :private_network, ip: MASTER_IP
+		master.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+		master.vm.provision "shell", privileged: true, path: "scripts/master_setup.sh", args: [MASTER_IP]
+
+		master.vm.provider "virtualbox" do |v|
+			v.name = MASTER_NAME
+		end
+	end
+
+	config.vm.define WORKER_NAME do |worker|
+		worker.vm.hostname = WORKER_NAME
+		worker.vm.network :private_network, ip: WORKER_IP 
+		worker.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+		worker.vm.provision "shell", privileged: true, path: "scripts/worker_setup.sh", args: [MASTER_IP, WORKER_IP]
+
+		worker.vm.provider "virtualbox" do |v|
+			v.name = WORKER_NAME
+		end
+	end
+end
