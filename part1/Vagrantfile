@@ -12,9 +12,7 @@ $DISABLE_FIREWALL_SCRIPT = <<-SHELL
 SHELL
 
 Vagrant.configure("2") do |config|
-    config.vm.box = "centos/8"
-    config.vm.box_url = "https://app.vagrantup.com/centos/boxes/8/versions/2011.0/providers/virtualbox.box"
-    config.vm.box_check_update = false
+    config.vm.box = "generic/centos8"
     config.vm.provision "shell", inline: $DISABLE_FIREWALL_SCRIPT 
 
     config.vbguest.installer_options = { allow_kernel_upgrade: true }
