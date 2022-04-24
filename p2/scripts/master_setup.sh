@@ -7,7 +7,7 @@ echo "alias k='k3s kubectl'" >> /etc/profile.d/00-aliases.sh
 
 sudo yum install net-tools -y
 
-/usr/local/bin/kubectl apply -f /vagrant/kubernetes/app1.yaml
-/usr/local/bin/kubectl apply -f /vagrant/kubernetes/app2.yaml
-/usr/local/bin/kubectl apply -f /vagrant/kubernetes/app3.yaml
-/usr/local/bin/kubectl apply -f /vagrant/kubernetes/ingress.yaml
+/usr/local/bin/kubectl apply -f /vagrant/confs/app1.yaml
+/usr/local/bin/kubectl apply -f /vagrant/confs/app2.yaml
+/usr/local/bin/kubectl apply -f /vagrant/confs/app3.yaml
+/usr/local/bin/kubectl apply -f /vagrant/confs/ingress.yaml
