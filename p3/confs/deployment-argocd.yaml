@@ -8,7 +8,6 @@ spec:
   source:
     repoURL: https://github.com/harm-smits/inception-of-things-cd.git
     targetRevision: HEAD
-    path: dev
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
