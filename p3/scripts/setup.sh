@@ -34,3 +34,5 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 kubectl apply -f ../confs/deployment-argocd.yaml
 kubectl apply -f ../confs/deployment-wil.yaml
+
+echo "alias k=kubectl" >> ~/.bashrc
