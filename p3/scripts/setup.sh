@@ -1,13 +1,18 @@
-#!/usr/bin/env bash
 
-echo "Installing Docker" # https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
+echo "Installing Docker" # https://www.fosslinux.com/49959/install-docker-on-debian.htm
 sudo apt update -y
-sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-apt-cache policy docker-ce
-sudo apt install docker-ce -y
-sudo apt install man git curl wget
+sudo apt install man git curl wget -y
+sudo apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+sudo apt-get update -y
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+docker --version
+# sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+# apt-cache policy docker-ce
+# sudo apt install docker-ce -y
 
 echo "Installing k3d" # https://k3d.io/v5.4.1/
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
@@ -24,5 +29,8 @@ k3d kubeconfig get $CLUSTER_NAME > k3d_config
 
 echo "Installing Argo CD"
 kubectl create namespace argocd
+kubectl create namespace dev
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl apply -f ../confs/deployment-argcocd.yaml
+
+kubectl apply -f ../confs/deployment-argocd.yaml
+kubectl apply -f ../confs/deployment-wil.yaml
