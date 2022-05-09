@@ -22,6 +22,7 @@ kubectl apply -n argocd -f ../confs/ingress.yaml
 echo "${GREEN}Applying Deployment-Wil${END}"
 kubectl apply -f ../confs/deployment-wil.yaml
 
+sleep 10
 echo "${CYN}Let's wait for all pods in dev to be ready${END}"
 kubectl wait --for=condition=Ready pods --all -n dev --timeout=-1s
 
