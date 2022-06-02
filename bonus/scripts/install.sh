@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # https://devopscube.com/install-configure-helm-kubernetes/
 sudo curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
@@ -13,7 +15,7 @@ sudo helm upgrade --install gitlab gitlab/gitlab \
   --set global.hosts.domain=10.11.1.150.nip.io \
   --set global.hosts.externalIP=10.11.1.150 \
   --set certmanager-issuer.email=hsmits@student.codam.nl \
-  --set postgresql.image.tag=13.6.0
+  --set postgresql.image.tag=13.6.0 \
   --set global.edition=ce \
   --timeout 600s
 
